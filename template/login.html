@@ -8,62 +8,105 @@
 </head>
 <body>
 
-<h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
-		<form action="#">
+		<form id="signup" action="#">
 			<h1>Create Account</h1>
-			<div class="social-container">
-				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-			</div>
-			<span>or use your email for registration</span>
-			<input type="text" placeholder="Name" />
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<button>Sign Up</button>
+
+			<!-- <span>or use your email for registration</span> -->
+			<input type="text" placeholder="Name" id="name" required/>
+            <input type="username" placeholder="User Name" id="uname" required/>
+			<input type="email" placeholder="Email" id="mail" required/>
+			<input type="password" placeholder="Password" id="passwd" required/>
+            
+            <select id="roled" name="role" required>
+                <option value="" disabled selected hidden>Select Role</option>
+                <option value="student">Student</option>
+                <option value="organizer">Organizer</option>
+                <option value="faculty">Faculty</option>
+            </select>
+
+			<button type="submit">Sign Up</button>
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
-		<form action="#">
+		<form action="#" id="login">
 			<h1>Sign in</h1>
-			<div class="social-container">
-				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-			</div>
-			<span>or use your account</span>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<a href="#">Forgot your password?</a>
-			<button>Sign In</button>
+			
+			<!-- <span>or use your account</span> -->
+			<input type="username" placeholder="User Name" id="unames" required/>
+			<input type="password" placeholder="Password" id="passwds" required/>
+            <select id="roleds" name="role" required>
+                <option value="" disabled selected hidden>Select Role</option>
+                <option value="student">Student</option>
+                <option value="organizer">Organizer</option>
+                <option value="faculty">Faculty</option>
+            </select>
+			<!-- <a href="#">Forgot your password?</a> -->
+			<button type="submit">Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-left">
 				<h1>Welcome Back!</h1>
-				<p>To keep connected with us please login with your personal info</p>
+				<p>please login with your personal info</p>
 				<button class="ghost" id="signIn">Sign In</button>
 			</div>
 			<div class="overlay-panel overlay-right">
-				<h1>Hello, Friend!</h1>
-				<p>Enter your personal details and start journey with us</p>
+				<h1>Hello!</h1>
+				<p>Enter your personal details and start your event management today</p>
 				<button class="ghost" id="signUp">Sign Up</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<footer>
-	<p>
-		Created with <i class="fa fa-heart"></i> by
-		<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-		- Read how I created this and how you can join the challenge
-		<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
-	</p>
-</footer>
+<script>
+    document.getElementById('login').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('unames').value;
+        const password = document.getElementById('passwds').value;
+        const role = document.getElementById('roleds').value;
+
+        const response = await fetch('http://127.0.0.1:5000/submit/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password, role }),
+            
+        });
+
+        const result = await response.json();
+        alert(result.message);
+    });
+</script>
+
+<script>
+    document.getElementById('signup').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('uname').value;
+        const password = document.getElementById('passwd').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('mail').value;
+        const role = document.getElementById('roled').value;
+
+        const response = await fetch('http://127.0.0.1:5000/submit/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, username, password, role }),
+            
+        });
+
+        const result = await response.json();
+        alert(result.message);
+    });
+</script>
 
 <script>
     const signUpButton = document.getElementById('signUp');
@@ -81,3 +124,15 @@
 
 </body>
 </html>
+
+<!-- 
+<form id="sumForm">
+    <label for="num1">Number 1:</label>
+    <input type="number" id="num1" name="num1" required><br><br>
+    
+    <label for="num2">Number 2:</label>
+    <input type="number" id="num2" name="num2" required><br><br>
+    
+    <button type="submit">Submit</button>
+</form>
+-->

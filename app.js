@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'index.html'));
@@ -12,6 +14,22 @@ app.get('/', (req, res) => {
 // PAGES CONNECTING TO HOME
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'login.html'));
+});
+
+app.post('/submit/login', (req, res) => {
+  const { username, password, role } = req.body;
+
+  const result = `The concatenated string is: ${username}${password}${role}`;
+
+  res.json({ message: result });
+});
+
+app.post('/submit/register', (req, res) => {
+  const { name, email, username, password, role } = req.body;
+
+  const result = `The concatenated string is: ${name}, ${email}, ${username}, ${password} ${role}`;
+
+  res.json({ message: result });
 });
 
 const PORT = 5000;

@@ -7,6 +7,7 @@
 
 body {
 	background: #f6f5f7;
+    /* background: url('/media/NITC.png') no-repeat center center/cover; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -160,6 +161,7 @@ input {
 }
 
 .overlay {
+    /* background: rgba(0, 0, 0, 0.5); */
 	background: #FF416C;
 	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
 	background: linear-gradient(to right, #FF4B2B, #FF416C);
@@ -225,28 +227,19 @@ input {
 	height: 40px;
 	width: 40px;
 }
-
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
-}
-
-footer p {
-    margin: 10px 0;
-}
-
-footer i {
-    color: red;
-}
-
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
-}
+select {
+    background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+    border-radius: 4px;
+    appearance: none;
+  }
+  
+  /* select:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+  } */
+  
