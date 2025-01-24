@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const eventRoutes = require('./routes/events');
 const roleRoutes = require('./routes/roles');
+const userRoutes = require('./routes/users');
+const Role = require('./models/Role');
 const cors = require('cors');
 const path = require('path');
 
@@ -43,50 +45,24 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'login.html'));
 });
 
-// Login route - implement actual authentication
-app.post('/submit/login', async (req, res) => {
-  const { email, password } = req.body;
 
-  try {
-    // Authenticate user (use your actual authentication logic here)
-    const user = await User.findOne({ email });
+// Add this to your server startup script (e.g., server.js) to ensure roles are added before starting the app
+ // Import Role model
 
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+async function createRoles() {
+    const roles = ['student', 'organizer', 'faculty','admin'];
+    
+    for (const roleName of roles) {
+        const roleExists = await Role.findOne({ name: roleName });
+        if (!roleExists) {
+            await new Role({ name: roleName }).save();
+        }
     }
+}
 
-    // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// Call the function to create roles
+createRoles().then(() => console.log('Roles created/checked')).catch(err => console.error(err));
 
-    res.json({ message: 'Login successful', token });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Register route - implement actual registration logic
-app.post('/submit/register', async (req, res) => {
-  const { username, email, password, roleName } = req.body;
-
-  try {
-    // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email already exists' });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
-    const newUser = new User({ username, email, password: hashedPassword, roleName });
-    await newUser.save();
-
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
 
 // Start the server
 const PORT = process.env.PORT || 5000;

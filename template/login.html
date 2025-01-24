@@ -10,7 +10,7 @@
 
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
-		<form id="signup" action="#">
+		<form id="signup" action="/api/auth/register" method="POST">
 			<h1>Create Account</h1>
 
 			<!-- <span>or use your email for registration</span> -->
@@ -30,7 +30,7 @@
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
-		<form action="#" id="login">
+		<form action="/api/auth/login" id="login" method="POST">
 			<h1>Sign in</h1>
 			
 			<!-- <span>or use your account</span> -->
@@ -60,6 +60,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="message"></div>
 </div>
 
 <script>
@@ -70,17 +71,26 @@
         const password = document.getElementById('passwds').value;
         const role = document.getElementById('roleds').value;
 
-        const response = await fetch('http://127.0.0.1:5000/submit/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password, role }),
-            
-        });
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password, role }),
+            });
 
-        const result = await response.json();
-        alert(result.message);
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+            } else {
+                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+        }
     });
 </script>
 
@@ -94,17 +104,26 @@
         const email = document.getElementById('mail').value;
         const role = document.getElementById('roled').value;
 
-        const response = await fetch('http://127.0.0.1:5000/submit/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, email, username, password, role }),
-            
-        });
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, username, password, role }),
+            });
 
-        const result = await response.json();
-        alert(result.message);
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+            } else {
+                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+        }
     });
 </script>
 
