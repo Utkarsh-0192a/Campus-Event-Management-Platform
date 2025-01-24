@@ -19,9 +19,12 @@ app.get('/login', (req, res) => {
 app.post('/submit/login', (req, res) => {
   const { username, password, role } = req.body;
 
-  const result = `The concatenated string is: ${username}${password}${role}`;
-
-  res.json({ message: result });
+  var result;
+  if (username == "dipanshu" && password == "hello"){
+    result = 1;
+  }
+  else result = 0;
+  res.json({message: result});
 });
 
 app.post('/submit/register', (req, res) => {
@@ -30,6 +33,14 @@ app.post('/submit/register', (req, res) => {
   const result = `The concatenated string is: ${name}, ${email}, ${username}, ${password} ${role}`;
 
   res.json({ message: result });
+});
+
+app.get('/home/student', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'studentHome.html'));
+});
+
+app.get('/home/organizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'organizerHome.html'));
 });
 
 const PORT = 5000;
