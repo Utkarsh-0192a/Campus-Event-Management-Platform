@@ -1,3 +1,5 @@
+// File: models/Role.js
+
 const mongoose = require('mongoose');
 
 // Define the Role schema
