@@ -10,7 +10,6 @@ const authenticate = require('../middleware/authenticate'); // Authentication mi
 const router = express.Router();
 
 // User Registration
-// User Registration
 router.post('/register', async (req, res) => {
     const { name, username, email, password, role } = req.body;
 
@@ -37,7 +36,7 @@ router.post('/register', async (req, res) => {
         });
 
         // Hash the password
-        newUser.password = await bcrypt.hash(password, 10);
+        newUser.password = password ; //await bcrypt.hash(password, 10);
 
         // Save the new user
         await newUser.save();
