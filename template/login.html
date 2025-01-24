@@ -3,91 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>NITC Event Manager</title>
     <link rel="stylesheet" href="/login.css">
-    <style>
-        /* Custom Alert Styles */
-        .alert-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .alert {
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            color: #333;
-            position: relative;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            opacity: 0.95;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-
-        .alert-info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            color: #0c5460;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 20px;
-            color: #333;
-        }
-    </style>
 </head>
 <body>
-    <!-- Flash Messages Section -->
-    <div class="alert-container">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <span>{{ message }}</span>
-                        <span class="close-btn" onclick="this.parentElement.style.display='none'">&times;</span>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
 
-    <!-- Login Form Section -->
-    <div class="login-container">
-        <h2>Welcome Back</h2>
-        <p>Please login to your account</p>
-        <form action="{{ url_for('login') }}" method="post">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+<h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="#">
+			<h1>Create Account</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>or use your email for registration</span>
+			<input type="text" placeholder="Name" />
+			<input type="email" placeholder="Email" />
+			<input type="password" placeholder="Password" />
+			<button>Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="#">
+			<h1>Sign in</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>or use your account</span>
+			<input type="email" placeholder="Email" />
+			<input type="password" placeholder="Password" />
+			<a href="#">Forgot your password?</a>
+			<button>Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+<footer>
+	<p>
+		Created with <i class="fa fa-heart"></i> by
+		<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+		- Read how I created this and how you can join the challenge
+		<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+	</p>
+</footer>
 
-            <button type="submit">Login</button>
-        </form>
-        <div class="footer">
-            <p>Don't have an account? <a href="/auth/register">Sign up</a></p>
-        </div>
-    </div>
+<script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+    
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
+    
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+    </script>
+
 </body>
 </html>
