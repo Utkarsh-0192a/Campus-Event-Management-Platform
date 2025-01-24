@@ -36,12 +36,12 @@
 			<!-- <span>or use your account</span> -->
 			<input type="username" placeholder="User Name" id="unames" required/>
 			<input type="password" placeholder="Password" id="passwds" required/>
-            <select id="roleds" name="role" required>
+            <!-- <select id="roleds" name="role" required>
                 <option value="" disabled selected hidden>Select Role</option>
                 <option value="student">Student</option>
                 <option value="organizer">Organizer</option>
                 <option value="faculty">Faculty</option>
-            </select>
+            </select> -->
 			<!-- <a href="#">Forgot your password?</a> -->
 			<button type="submit">Sign In</button>
 		</form>
@@ -69,7 +69,7 @@
 
         const username = document.getElementById('unames').value;
         const password = document.getElementById('passwds').value;
-        const role = document.getElementById('roleds').value;
+        // const role = document.getElementById('roleds').value;
 
         try {
             const response = await fetch('/api/auth/login', {
@@ -77,7 +77,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password, role }),
+                body: JSON.stringify({ username, password}),
             });
 
             const result = await response.json();
@@ -110,7 +110,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, username, password, role }),
+                body: JSON.stringify({ name, username, email, password, role }),
             });
 
             const result = await response.json();

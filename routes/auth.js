@@ -10,8 +10,9 @@ const authenticate = require('../middleware/authenticate'); // Authentication mi
 const router = express.Router();
 
 // User Registration
+// User Registration
 router.post('/register', async (req, res) => {
-    const { username, email, password, roleName } = req.body;
+    const { name, username, email, password, role } = req.body;
 
     try {
         // Check if the email is already registered
@@ -20,18 +21,19 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'Email is already registered' });
         }
 
-        // Check if the role exists
-        const role = await Role.findOne({ name: roleName });
-        if (!role) {
+        // Fetch the role by name
+        const roled = await Role.findOne({ name: role });
+        if (!roled) {
             return res.status(400).json({ message: 'Invalid role' });
         }
 
         // Create a new user
         const newUser = new User({
+            name,
             username,
             email,
             password,
-            role: role._id, // Assign the role to the user
+            role: roled._id, // Assign the role to the user
         });
 
         // Hash the password
@@ -48,21 +50,21 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// User Login
+
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body; // Extract username and password from request body
 
     try {
         // Check if the user exists
-        const user = await User.findOne({ email }).populate('role'); // Populate role details
+        const user = await User.findOne({ username }).populate('role'); // Populate role details
         if (!user) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+            return res.status(400).json({ message: 'Invalid username or password{user}' });
         }
 
         // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+            return res.status(400).json({ message: 'Invalid username or password{pass}' });
         }
 
         // Generate a JWT token
@@ -80,7 +82,7 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                role: user.role.name,  // Send role name as part of the response
+                role: user.role.name, // Send role name as part of the response
             },
         });
     } catch (error) {
@@ -88,5 +90,5 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Error logging in', error });
     }
 });
-
 module.exports = router;
+
