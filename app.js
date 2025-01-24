@@ -20,8 +20,8 @@ app.get('/home/student', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'studentHome.html'));
 });
 
-app.get('/home/organizer', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'organizerHome.html'));
+app.get('/home/organizer/addevent', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'addEvent.html'));
 });
 
 
@@ -47,9 +47,9 @@ app.post('/submit/register', (req, res) => {
 });
 
 app.post('/submit/event', (req, res) => {
-  const { name, email, username, password, role } = req.body;
+  const { name, date, timestart, timeend, venue, category } = req.body;
 
-  const result = `The concatenated string is: ${name}, ${email}, ${username}, ${password} ${role}`;
+  const result = `The concatenated string is: ${name}, ${date}, ${timestart}, ${timeend} ${venue} ${category}`;
 
   res.json({ message: result });
 });
