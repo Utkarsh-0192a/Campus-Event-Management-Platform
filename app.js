@@ -16,6 +16,17 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'login.html'));
 });
 
+app.get('/home/student', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'studentHome.html'));
+});
+
+app.get('/home/organizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'organizerHome.html'));
+});
+
+
+// POST REQUESTS
+
 app.post('/submit/login', (req, res) => {
   const { username, password, role } = req.body;
 
@@ -35,13 +46,15 @@ app.post('/submit/register', (req, res) => {
   res.json({ message: result });
 });
 
-app.get('/home/student', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'studentHome.html'));
+app.post('/submit/event', (req, res) => {
+  const { name, email, username, password, role } = req.body;
+
+  const result = `The concatenated string is: ${name}, ${email}, ${username}, ${password} ${role}`;
+
+  res.json({ message: result });
 });
 
-app.get('/home/organizer', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'organizerHome.html'));
-});
+// LISTENER
 
 const PORT = 5000;
 app.listen(PORT, () => {

@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif;
             /* background-color: #764ba2; */
             margin: 0;
-            padding: 20px;
+            padding: 0px;
         }
         h1 {
             text-align: center;
@@ -44,6 +44,8 @@
         }
         input[type="text"],
         input[type="file"],
+        input[type="date"],
+        input[type="time"],
         select {
             width: calc(100% - 22px);
             padding: 10px;
@@ -88,7 +90,6 @@
 <body>
 
     <div class="container">
-        <!-- <div style="display: flex; justify-content: space-between;"> -->
         <a href="/home" class="logout">Home</a>
         <!-- <a href="/track" class="logout" style="float: left;">Track</a> -->
         <!-- <a href="/student/notification" class="logout" style="float: left;">Notification</a> -->
@@ -97,22 +98,22 @@
         <h1>Request Permission</h1>
         <form id="requestForm" action="/submit" method="post" enctype="multipart/form-data">
             <label for="name">Event Name:</label>
-            <input type="text" id="name" name="name"  required placeholder="Code.init()">
+            <input type="text" id="evename" name="name"  required placeholder="Code.init()">
 
             <label for="date">Date:</label>
-            <input type="text" id="date" name="date" required placeholder="30-02-2025">
+            <input type="date" id="evedate" name="date" required placeholder="30-02-2025">
 
             <label for="timestart">Start time:</label>
-            <input type="text" id="timestart" name="timestart" required placeholder="13:00">
+            <input type="time" id="evetimestart" name="timestart" required pattern="[0-2][0-9]:[0-5][0-9]" placeholder="13:00">
 
             <label for="timeend">End time:</label>
-            <input type="text" id="timeend" name="timeend" required placeholder="15:00">
+            <input type="time" id="evetimeend" name="timeend" required pattern="[0-2][0-9]:[0-5][0-9]" placeholder="15:00">
 
             <label for="venue">Venue:</label>
-            <input type="text" id="venue" name="venue" required placeholder="SSL/NSL">
+            <input type="text" id="evevenue" name="venue" required placeholder="SSL/NSL">
 
-            <label for="permissionType">Category:</label>
-            <select id="permissionType" name="type" required>
+            <label for="category">Category:</label>
+            <select id="evecategory" name="type" required>
                 <option value="">Select</option>
                 <option value="workshop">Workshop</option>
                 <option value="hackathon">Hackathon</option>
@@ -121,15 +122,46 @@
             </select>
 
             <label for="dis">Discription:</label>
-            <input type="text" id="dis" name="dis" required placeholder="About the Event">
+            <input type="text" id="evedis" name="dis" required placeholder="About the Event">
 
-            <!-- <label for="document">Upload Relevent Document:</label>
-            <input type="file" id="document" name="document" required> -->
             <div style="text-align: center;">
             <button type="submit" style="border-radius: 30px; margin: 20px; padding: 20px; max-width: 200px; font-size: larger;">Submit Request</button>
             </div>
         </form>
 
     </div>
+
+    <script>
+        document.getElementById('requestForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('uname').value;
+        const date = document.getElementById('passwd').value;
+        const timestart = document.getElementById('name').value;
+        const timeend = document.getElementById('mail').value;
+        const venue = document.getElementById('roled').value;
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, username, password, role }),
+            });
+
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+            } else {
+                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+        }
+    });
+    </script>
 </body>
 </html>
