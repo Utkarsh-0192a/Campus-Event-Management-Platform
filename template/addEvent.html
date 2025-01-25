@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Request Page</title>
+    <link rel="stylesheet" href="/addEvent.css">
+</head>
+<body>
+
+    <div class="container">
+        <a href="/home" class="logout">Home</a>
+        <h1>Add Event</h1>
+        <form id="requestForm" method="post" enctype="multipart/form-data">
+            <label for="name">Event Name:</label>
+            <input type="text" id="evename" name="name"  required placeholder="Code.init()">
+
+            <label for="date">Date:</label>
+            <input type="date" id="evedate" name="date" required placeholder="30-02-2025">
+
+            <label for="timestart">Start time:</label>
+            <input type="time" id="evetimestart" name="timestart" required pattern="[0-2][0-9]:[0-5][0-9]" placeholder="13:00">
+
+            <label for="timeend">End time:</label>
+            <input type="time" id="evetimeend" name="timeend" required pattern="[0-2][0-9]:[0-5][0-9]" placeholder="15:00">
+
+            <label for="venue">Venue:</label>
+            <input type="text" id="evevenue" name="venue" required placeholder="SSL/NSL">
+
+            <label for="category">Category:</label>
+            <select id="evecategory" name="type" required>
+                <option value="">Select</option>
+                <option value="workshop">Workshop</option>
+                <option value="hackathon">Hackathon</option>
+                <option value="cultural_event">Cultural Event</option>
+                <option value="contest">Contest</option>
+            </select>
+
+            <label for="dis">Discription:</label>
+            <input type="text" id="evedis" name="dis" required placeholder="About the Event">
+
+            <div style="text-align: center;">
+            <button type="submit" style="border-radius: 30px; margin: 20px; padding: 20px; max-width: 200px; font-size: larger;">Submit Event</button>
+            </div>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('requestForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('evename').value;
+        const date = document.getElementById('evedate').value;
+        const timestart = document.getElementById('evetimestart').value;
+        const timeend = document.getElementById('evetimeend').value;
+        const venue = document.getElementById('evevenue').value;
+        const category = document.getElementById('evecategory').value;
+        const description = document.getElementById('evedis').value;
+
+        const token = localStorage.getItem('token'); // Get the token from local storage
+
+        if (!token) {
+            alert('You must be logged in to create an event');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/events/create-event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the request headers
+                },
+                body: JSON.stringify({ name, date, timestart, timeend, venue, category, description}),
+            });
+
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+            } else {
+                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+        }
+    });
+    </script>
+</body>
+</html>

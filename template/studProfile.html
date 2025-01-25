@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | NIT Event Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            transform: scale(1.250);
+            /* background: linear-gradient(to right, #FF4B2B, #FF416C); */
+            background: #f6f5f6;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+        }
+
+        .profile-container {
+            background: #fff;
+            color: #333;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: grid;
+            grid-template-columns: 250px 1fr;
+        }
+
+        /* Sidebar Styling */
+        .profile-sidebar {
+            background: linear-gradient(to bottom, #FF4B2B, #FF416C);
+            padding: 20px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .profile-sidebar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+
+        .profile-sidebar h1 {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .profile-sidebar p {
+            font-size: 14px;
+        }
+
+        .profile-sidebar button {
+            background: #fff;
+            color: #FF416C;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .profile-sidebar button:hover {
+            background: #FF416C;
+            color: #fff;
+        }
+
+        /* Main Content Styling */
+        .profile-main {
+            background: #fff;
+            padding: 20px;
+        }
+
+        .profile-main h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #FF416C;
+        }
+
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .profile-section ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-section ul li {
+            background: #f8f8f8;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-section ul li span {
+            font-weight: 500;
+        }
+
+        .profile-section ul li .status {
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .status.upcoming {
+            background: #FFA502;
+        }
+
+        .status.attended {
+            background: #4CAF50;
+        }
+
+        .status.cancelled {
+            background: #E74C3C;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-actions button {
+            background: #FF416C;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .profile-actions button:hover {
+            background: #FF4B2B;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-sidebar img {
+                margin-bottom: 10px;
+            }
+        }
+        .scroll-container {
+            height: 200px; /* Adjust height to your needs */
+            /* background: linear-gradient(to bottom, #FF4B2B, #FF416C); */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 0.25px solid #ccc; /* Optional: Add a border for visual distinction */
+            padding: 10px;
+            background-color: #f9f9f9; /* Light background for better readability */
+            border-radius: 5px; /* Rounded corners for aesthetics */
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+            <!-- <img src="default-profile.png" alt="Profile Picture"> -->
+            <h1>John Doe</h1>
+            <!-- <p>Student</p> -->
+            <p>john.doe@example.com</p>
+            <a href="/home/student"><button>Home</button></a>
+            <a href="/logout"><button>Log Out</button></a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="profile-main">
+            <!-- Registered Events -->
+            <div class="profile-section">
+                <h2>Registered Events</h2>
+                <div class="scroll-container">
+                <ul>
+                    <!-- Registered events will be dynamically loaded here -->
+                </ul>
+            </div>
+            </div>
+
+            <!-- Organized Events
+            <div class="profile-section">
+                <h2>Organized Events</h2>
+                <ul>
+                    <li>
+                        <span>AI Workshop - 20th Oct 2024</span>
+                        <span>25 Participants</span>
+                    </li>
+                </ul>
+            </div> -->
+
+            <!-- Actions -->
+            <div class="profile-actions">
+                <a href="/home/student"><button>View Upcoming Events</button></a>
+                <!-- <button>Create New Event</button> -->
+                <!-- <button>Download Certificate</button> -->
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found for user details');
+                return;
+            }
+            try {
+                const response = await fetch('/api/auth/me', {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const userData = await response.json();
+                    document.querySelector('.profile-sidebar h1').textContent = userData.name || 'Unnamed';
+                    document.querySelector('.profile-sidebar p').textContent = userData.email || 'No Email Provided';
+                } else {
+                    console.error('Failed to fetch user info');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+
+            // Fetch registered events
+            try {
+                const response = await fetch('/api/events/my-events', {
+                    headers: { 'Authorization': `Bearer ${token}` },
+                });
+
+                const events = await response.json();
+                const container = document.querySelector('.profile-section ul');
+                container.innerHTML = '';
+
+                if (events.length === 0) {
+                    container.innerHTML = '<li>No registered events</li>';
+                } else {
+                    events.forEach(event => {
+                        const edate = new Date(event.date);
+                        const timestamp1 = edate.getTime();
+                        const cdate = new Date();
+                        const timestamp2 = cdate.getTime();
+                        // console.log(timestamp1);
+                        // console.log(timestamp2);
+                        if (timestamp1 > timestamp2){
+                            status = 'upcoming';
+                        }
+                        else{
+                            status = 'attended';
+                        }
+                        const eventItem = document.createElement('li');
+                        eventItem.innerHTML = `
+                            <span>${event.name} - ${new Date(event.date).toLocaleDateString()}</span>
+                            <span class="status ${status}">${status}</span>
+                        `;
+                        container.appendChild(eventItem);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching registered events:', error);
+            }
+        });
+    </script>
+</body>
+</html>
