@@ -84,7 +84,12 @@
             const messageDiv = document.getElementById('message');
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
-                alert('Login successful');
+                localStorage.setItem('token', result.token); // Store the token in local storage
+                if (result.role === 'student') {
+                    window.location.href = '/home/student.html'; // Redirect to student.html
+                } else if (result.role === 'organizer') {
+                    window.location.href = '/home/organizer.html'; // Redirect to organizer.html
+                }
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
                 alert(`Login failed: ${result.message}`);

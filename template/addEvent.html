@@ -56,14 +56,23 @@
         const timeend = document.getElementById('evetimeend').value;
         const venue = document.getElementById('evevenue').value;
         const category = document.getElementById('evecategory').value;
+        const description = document.getElementById('evedis').value;
+
+        const token = localStorage.getItem('token'); // Get the token from local storage
+
+        if (!token) {
+            alert('You must be logged in to create an event');
+            return;
+        }
 
         try {
-            const response = await fetch('/api/event/createevent', {
+            const response = await fetch('/api/events/create-event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the request headers
                 },
-                body: JSON.stringify({ name, date, timestart, timeend, venue, category }),
+                body: JSON.stringify({ name, date, timestart, timeend, venue, category, description }),
             });
 
             const result = await response.json();

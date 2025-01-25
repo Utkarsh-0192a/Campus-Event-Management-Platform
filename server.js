@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // MongoDB connection
-const mongoURI = 'mongodb://localhost:27017/your_database_name';
+const mongoURI = 'mongodb://localhost:27017/campus_events';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
@@ -41,6 +41,18 @@ app.use('/api/roles', roleRoutes);
 // Serve HTML pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'index.html'));
+});
+
+app.get('/home/student', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'student.html'));
+});
+
+app.get('/home/organizer/addevent', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'addEvent.html'));
+});
+
+app.get('/home/student/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'profile.html'));
 });
 
 app.get('/login', (req, res) => {
