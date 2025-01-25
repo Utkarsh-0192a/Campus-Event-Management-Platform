@@ -1,7 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const authenticate = require('../middleware/authenticate'); // Authentication middleware
@@ -26,14 +25,14 @@ router.post('/register', async (req, res) => {
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = password;
 
         // Create a new user
         const newUser = new User({
             name,
             username,
             email,
-            password: hashedPassword,
+            password: password,
             role: roleDoc._id, // Assign the role to the user
         });
 
@@ -65,12 +64,9 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        // Generate a session token
-        const sessionToken = crypto.randomBytes(64).toString('hex');
-
         // Generate a JWT token
         const token = jwt.sign(
-            { userId: user._id, sessionToken, role: user.role.name }, // Include user role in the token payload
+            { userId: user._id, role: user.role.name }, // Include user role in the token payload
             process.env.JWT_SECRET,
             { expiresIn: '1h' } // Token expires in 1 hour
         );
@@ -109,19 +105,6 @@ router.get('/me', authenticate, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching user info', error });
-    }
-});
-
-// User Logout
-router.post('/logout', authenticate, async (req, res) => {
-    try {
-        // Invalidate the session token
-        req.user.sessionToken = null;
-        await req.user.save();
-        res.status(200).json({ message: 'Logout successful' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error logging out', error });
     }
 });
 
