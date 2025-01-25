@@ -48,45 +48,48 @@
 
     <script>
         document.getElementById('requestForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+            e.preventDefault();
 
-        const name = document.getElementById('evename').value;
-        const date = document.getElementById('evedate').value;
-        const timestart = document.getElementById('evetimestart').value;
-        const timeend = document.getElementById('evetimeend').value;
-        const venue = document.getElementById('evevenue').value;
-        const category = document.getElementById('evecategory').value;
-        const description = document.getElementById('evedis').value;
+            const name = document.getElementById('evename').value;
+            const date = document.getElementById('evedate').value;
+            const timestart = document.getElementById('evetimestart').value;
+            const timeend = document.getElementById('evetimeend').value;
+            const venue = document.getElementById('evevenue').value;
+            const category = document.getElementById('evecategory').value;
+            const description = document.getElementById('evedis').value;
 
-        const token = localStorage.getItem('token'); // Get the token from local storage
-
-        if (!token) {
-            alert('You must be logged in to create an event');
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/events/create-event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Include the token in the request headers
-                },
-                body: JSON.stringify({ name, date, timestart, timeend, venue, category, description}),
+            const tokenResponse = await fetch('/api/auth/check-token', {
+                method: 'GET',
+                credentials: 'include' // Include cookies in the request
             });
 
-            const result = await response.json();
-            const messageDiv = document.getElementById('message');
-            if (response.ok) {
-                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
-            } else {
-                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+            if (!tokenResponse.ok) {
+                console.error('Token is invalid. Please log in.');
+                return;
             }
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
-        }
-    });
+
+            try {
+                const response = await fetch('/api/events/create-event', {
+                    method: 'POST',
+                    credentials: 'include', // Include cookies in the request
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, date, timestart, timeend, venue, category, description })
+                });
+
+                const result = await response.json();
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+                } else {
+                    messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+            }
+        });
     </script>
 </body>
 </html>

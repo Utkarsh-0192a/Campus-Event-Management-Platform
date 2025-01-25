@@ -146,7 +146,7 @@ router.get('/upcoming-events', async (req, res) => {
 });
 
 // Route to get ongoing events
-router.get('/ongoing-events',async (req, res) => {
+router.get('/ongoing-events', async (req, res) => {
     try {
         const { category } = req.query;
         const today = new Date();
