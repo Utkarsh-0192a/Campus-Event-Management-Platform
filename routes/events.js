@@ -12,8 +12,10 @@ router.post('/create-event', authenticate, authorize(['admin', 'organizer']), as
         const event = new Event({
             name: req.body.name,
             date: req.body.date,
-            time: req.body.time,
+            stime: req.body.stime,
+            etime: req.body.etime,S,
             venue: req.body.venue,
+            category: req.body.category,
             description: req.body.description,
             organizer: req.user._id,  // Link the event to the logged-in organizer
         });
