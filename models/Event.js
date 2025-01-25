@@ -9,9 +9,9 @@ const eventSchema = new mongoose.Schema({
     date: { type: Date, required: true },
     stime: { type: String, required: true },
     etime: { type: String, required: true },
-    venue: { type: String },
-    category: { type: String },
-    description: { type: String },
+    venue: { type: String, required: true },
+    category: { type: String, required: true },
+    description: { type: String, required: true },
 
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to the organizer
     created_at: { type: Date, default: Date.now },
