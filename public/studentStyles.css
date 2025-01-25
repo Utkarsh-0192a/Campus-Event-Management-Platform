@@ -1,0 +1,371 @@
+/* Basic styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #feffec;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main{
+    margin-top: 100px;
+    margin-bottom: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+/* Style for the horizontal rule */
+hr.custom-line {
+    visibility: hidden;
+    width: 90%;  /* Line covers only 50% of the page */
+    border: 0;
+    border-top: 2px solid #333;  /* 2px solid line */
+    margin: 20px auto;  /* Centers the line horizontally and adds vertical space */
+}
+
+
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center the content */
+    /* background-color: #333; */
+    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+	background: linear-gradient(to right, #FF4B2B, #FF416C);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    z-index: 1000;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+}
+
+/* Left-aligned section with "Hello, Student" and avatar */
+.navbar-left {
+    display: flex;
+    align-items: center; /* Vertically center avatar and text */
+}
+
+.navbar-avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.navbar-text {
+    /* font-size: 18px; */
+    font-weight: bold;
+    color: white;
+}
+
+/* Navbar links styling */
+.navbar-links {
+    display: flex; /* Make links display inline */
+    list-style: none; /* Remove default list styling (bullets) */
+    margin: 0;
+    padding: 0;
+    margin-left: auto; /* Align navbar links to the right */
+    margin-right: 10%; /* Push the links 15% away from the right edge */
+    align-items: center; /* Vertically align links */
+}
+
+.navbar-links li {
+    margin-left: 20px; /* Space between each nav link */
+}
+
+.navbar-links li a {
+    color: #FF416C;
+    text-decoration: none; /* Remove underline from links */
+    font-size: 18px;
+    padding: 5px 10px; /* Add some padding around the text */
+    border-radius: 5px; /* Rounded corners on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color on hover */
+}
+
+/* Navbar links hover effect */
+.navbar-links li a:hover {
+    background-color: #FF416C; /* Darker background on hover */
+    color: #FFFFFF;
+}
+
+/* Card Section styling with margin */
+.cards-section {
+        display: flex;
+        /* flex-wrap: wrap; */
+        justify-content: center;
+        padding: 20px;
+        
+        overflow-x: auto; 
+        justify-content: flex-start; 
+        gap: 20px; 
+        padding: 10px 0px;
+        scroll-behavior: smooth; 
+        background: #f9f9f9;
+}
+
+.cards-section::-webkit-scrollbar {
+    height: 10px; 
+}
+
+.cards-section::-webkit-scrollbar-thumb {
+    background: #FF416C;
+    border-radius: 10px;
+}
+
+.cards-section::-webkit-scrollbar-track {
+    background: #e0e0e0;
+}
+
+/* Card styling */
+.card {
+    position: relative;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    height: 300px; 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    transition: transform 0.3s ease;
+}
+
+
+/* Card hover effect */
+.card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Content inside the card */
+.card-content {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.card p {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+/* Register button covering the entire card */
+.register-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent dark background */
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    opacity: 0;  /* Initially hidden */
+    transition: opacity 0.3s ease;  /* Smooth fade-in transition */
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: rgba(0, 0, 0, 0.85);  /* Darker on hover */
+}
+
+/* Show the register button on hover */
+.card:hover .register-button {
+    opacity: 1;  /* Make the register button visible on hover */
+}
+
+/* Go to Top button styling */
+#goToTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+}
+
+#goToTopBtn:hover {
+    background-color: #555;
+}
+
+/* Info button at the top-right of the card */
+.info-btn {
+    position: absolute;
+    top: 10px;  /* Distance from the top */
+    right: 10px;  /* Distance from the right */
+    background-color: rgba(0, 0, 0, 0.6);  /* Semi-transparent background */
+    color: white;
+    padding: 8px;
+    border-radius: 50%;  /* Make the button circular */
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.info-btn:hover {
+    background-color: rgba(0, 0, 0, 0.85);  /* Darker on hover */
+
+}
+
+/* Info icon (inside button) */
+.info-icon {
+    font-size: 18px;  /* Size of the 'i' */
+    font-weight: bold;
+}
+
+/* Tooltip Styling (initially hidden) */
+.tooltip {
+    display: none;  /* Hidden by default */
+    position: absolute;
+    top: 50%;
+    left: 110%;  /* Positioned to the right of the info button */
+    transform: translateY(-50%);  /* Vertically center the tooltip */
+    transform: translateX(-100%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    max-width: 200px;  /* You can adjust the max width to control text wrapping */
+    font-size: 14px;
+    word-wrap: break-word;  /* Break words that are too long to fit in the box */
+    white-space: normal;  /* Allow text to wrap to the next line */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+/* Show tooltip when hovering over the info button */
+.info-btn:hover .tooltip {
+    display: block;
+    opacity: 1;  /* Fade in the tooltip */
+}
+
+/* Hidden description box by default */
+.hover-description {
+    display: none;
+    position: absolute;
+    top: -40px; /* Position the description above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 200px;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* Show the description box when hovering over the info icon */
+.info-icon:hover + .hover-description {
+    display: block;
+}
+
+.navbutton {
+    border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FFFFFF;
+	color: #FF416C;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+.navbutton:hover {
+    background-color: #FF416C;
+    color: #fff;
+}
+
+.sect{
+    padding: 2%;
+    border-radius: 15px;
+    margin-top: 40px;
+    background-color: #fff;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+}
+
+
+.event-card {
+    /* background-color: rgba(255, 255, 255, 0.2); */
+    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    margin: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    min-width: 250px;
+    max-width: 250px; 
+    flex-shrink: 0;  
+    transition: transform 0.3s;
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.event-card h2 {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.event-card p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #f8d7da;
+}
+
+.event-card .date {
+    font-weight: bold;
+    color: #ffb3c1;
+}
+
+.event-card .button {
+    background-color: #fff;
+    color: #FF416C;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.event-card .button:hover {
+    background-color: #FF416C;
+    color: #fff;
+}

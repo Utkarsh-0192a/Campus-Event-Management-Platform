@@ -16,8 +16,12 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'login.html'));
 });
 
+app.get('/home/student/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'profile.html'));
+});
+
 app.get('/home/student', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'studentHome.html'));
+  res.sendFile(path.join(__dirname, 'template', 'student.html'));
 });
 
 app.get('/home/organizer/addevent', (req, res) => {
