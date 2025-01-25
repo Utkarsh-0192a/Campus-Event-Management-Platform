@@ -8,7 +8,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'index.html'));
+  res.sendFile(path.join(__dirname, 'template', 'shutter.html'));
 });
 
 // PAGES CONNECTING TO HOME
@@ -16,12 +16,16 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'login.html'));
 });
 
-app.get('/home/student/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'profile.html'));
+app.get('/profile/student', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'studProfile.html'));
 });
 
 app.get('/home/student', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'student.html'));
+});
+
+app.get('/home/organizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'organizer.html'));
 });
 
 app.get('/home/organizer/addevent', (req, res) => {
