@@ -2,7 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const eventRoutes = require('./routes/events');
 const roleRoutes = require('./routes/roles');
@@ -10,9 +10,10 @@ const userRoutes = require('./routes/users');
 const Role = require('./models/Role');
 const cors = require('cors');
 const path = require('path');
+require('dotenv').config();  // Load environment variables from .env file
 
 // Initialize dotenv for environment variables
-dotenv.config();
+// dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -27,7 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const mongoURI = 'mongodb://localhost:27017/your_database_name';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
