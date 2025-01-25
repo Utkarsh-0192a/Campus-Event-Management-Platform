@@ -13,6 +13,7 @@ const path = require('path');
 require('dotenv').config();
 const authorize  = require('./middleware/authorize');
 const authenticate = require('./middleware/authenticate');
+const cookieParser = require('cookie-parser');
 
 // Initialize dotenv for environment variables
 // dotenv.config();
@@ -22,6 +23,7 @@ const app = express();
 
 // Enable CORS
 app.use(cors());
+app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

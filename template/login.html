@@ -63,13 +63,14 @@
 	<div id="message"></div>
 </div>
 
+<!-- ...existing code... -->
+
 <script>
     document.getElementById('login').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const username = document.getElementById('unames').value;
         const password = document.getElementById('passwds').value;
-        // const role = document.getElementById('roleds').value;
 
         try {
             const response = await fetch('/api/auth/login', {
@@ -84,12 +85,11 @@
             const messageDiv = document.getElementById('message');
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
-                localStorage.setItem('token', result.token); // Store the token in local storage
-                // console.log(result.user.role);
+                // Redirect based on user role
                 if (result.user.role === 'student') {
-                    window.location.href = `/home/student?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
+                    window.location.href = `/home/student`;
                 } else if (result.user.role === 'organizer') {
-                    window.location.href = `/home/organizer?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
+                    window.location.href = `/home/organizer`;
                 }
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
@@ -102,8 +102,42 @@
         }
     });
 
- 
+    document.getElementById('signup').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('uname').value;
+        const password = document.getElementById('passwd').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('mail').value;
+        const role = document.getElementById('roled').value;
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, username, email, password, role }),
+            });
+
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+                alert('Registration successful');
+            } else {
+                messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                alert(`Registration failed: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+            alert('An error occurred during registration');
+        }
+    });
 </script>
+
+<!-- ...existing code... -->
 
 <script>
     document.getElementById('signup').addEventListener('submit', async (e) => {

@@ -3,13 +3,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// ...existing code...
+
 const authenticate = async (req, res, next) => {
     let token = '';
     const authHeader = req.header('Authorization');
     if (authHeader && authHeader.startsWith('Bearer ')) {
         token = authHeader.replace('Bearer ', '');
-    } else if (req.query.token) {
-        token = req.query.token;
+    } else if (req.cookies.token) {
+        token = req.cookies.token;
     } else {
         return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Access denied, no token provided')}`);
     }
@@ -28,5 +30,7 @@ const authenticate = async (req, res, next) => {
         return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Invalid or expired token')}`);
     }
 };
+
+// ...existing code...
 
 module.exports = authenticate;

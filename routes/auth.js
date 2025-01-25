@@ -48,6 +48,9 @@ router.post('/register', async (req, res) => {
 });
 
 // User Login
+// ...existing code...
+
+// User Login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -71,10 +74,12 @@ router.post('/login', async (req, res) => {
             { expiresIn: '1h' } // Token expires in 1 hour
         );
 
-        // Return the token and user info
+        // Set the token as a cookie
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+
+        // Return the user info
         res.status(200).json({
             message: 'Login successful',
-            token,
             user: {
                 id: user._id,
                 username: user.username,
@@ -87,6 +92,8 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Error logging in', error });
     }
 });
+
+// ...existing code...
 
 // Get Current User Info (Optional Endpoint)
 router.get('/me', authenticate, async (req, res) => {
