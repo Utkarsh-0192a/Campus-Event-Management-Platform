@@ -1,6 +1,5 @@
 // File: models/Event.js
 
-const e = require('express');
 const mongoose = require('mongoose');
 
 // Define Event Schema
@@ -12,7 +11,6 @@ const eventSchema = new mongoose.Schema({
     venue: { type: String, required: true },
     category: { type: String, required: true },
     description: { type: String, required: true },
-
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to the organizer
     created_at: { type: Date, default: Date.now },
 });
