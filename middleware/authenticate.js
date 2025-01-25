@@ -17,15 +17,19 @@ const authenticate = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId);
-        if (!user) {
-            return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('User not found or no longer exists')}`);
+        if (!user || !user.sessionToken || decoded.sessionToken !== user.sessionToken) {
+            return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Invalid session token')}`);
         }
 
         req.user = user; // Attach user to request object
+
+        // Add cache control header to prevent browser from caching protected pages
+        res.set('Cache-Control', 'no-store');
+
         next();
     } catch (error) {
         console.error('Authentication error:', error.message);
-        return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Invalid or expired token')}`);
+        return res.redirect('/login');
     }
 };
 
