@@ -129,7 +129,7 @@
                             }
                             const eventCard = document.createElement('div');
                             eventCard.className = 'event-card';
-                            eventCard.id = event.id;
+                            eventCard.id = event._id;
                             eventCard.innerHTML = `
                                 <h2>${event.name}</h2>
                                 <p>${disc}</p>
@@ -137,8 +137,8 @@
                                 <p class="date">From: ${event.stime}</p>
                                 <p class="date">To: ${event.etime}</p>
                                 <p class="date">At: ${event.venue}</p>
-                                <a href="#" class="button" onclick="showDetails('${event.name}', '${event.description}')" id="${event.id}">More Info</a>
-                                <a href="/participants/:${event.id}" class="button"  id="${event.id}">registrants</a>
+                                <a href="#" class="button" onclick="showDetails('${event.name}', '${event.description}')" id="${event._id}">More Info</a>
+                                <a href="/participants?id=${event._id}" class="button" id="${event._id}">Registrants</a>
                             `;
                             eventsContainer.appendChild(eventCard);
                         }

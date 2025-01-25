@@ -225,4 +225,20 @@ router.post('/verify', async (req, res) => {
     }
 });
 
+// Route to get participants for a specific event
+router.get('/participants/:eventId', authenticate, async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const event = await Event.findById(eventId).populate('registeredStudents', 'name email');
+
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        res.status(200).json(event.registeredStudents);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching participants', error: error.message });
+    }
+});
+
 module.exports = router;

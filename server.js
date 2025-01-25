@@ -101,10 +101,8 @@ app.get('/logout', (req, res) => {
 //   res.send('Token received');
 // });
 
-app.get("/participants/:eventId", (req, res) => {
-  const eventId = req.params.eventId;
-
-  res.sendFile(path.join(__dirname, 'template', 'participants.html'))
+app.get("/participants", authenticate, authorize('organizer'), (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'participants.html'));
 });
 
 app.use((err, req, res, next) => {
