@@ -369,3 +369,16 @@ hr.custom-line {
     background-color: #FF416C;
     color: #fff;
 }
+
+select {
+    background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: auto;
+	width: 100%;
+    max-width: 300px;
+    border-radius: 4px;
+    appearance: none;
+  }
