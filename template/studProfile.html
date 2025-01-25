@@ -174,6 +174,15 @@
                 margin-bottom: 10px;
             }
         }
+        .scroll-container {
+            height: 200px; /* Adjust height to your needs */
+            /* background: linear-gradient(to bottom, #FF4B2B, #FF416C); */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 0.25px solid #ccc; /* Optional: Add a border for visual distinction */
+            padding: 10px;
+            background-color: #f9f9f9; /* Light background for better readability */
+            border-radius: 5px; /* Rounded corners for aesthetics */
+        }
     </style>
 </head>
 <body>
@@ -182,10 +191,10 @@
         <div class="profile-sidebar">
             <!-- <img src="default-profile.png" alt="Profile Picture"> -->
             <h1>John Doe</h1>
-            <p>Role: Student</p>
-            <p>Email: john.doe@example.com</p>
-            <button>Home</button>
-            <button>Log Out</button>
+            <!-- <p>Student</p> -->
+            <p>john.doe@example.com</p>
+            <a href="/home/student"><button>Home</button></a>
+            <a href="/logout"><button>Log Out</button></a>
         </div>
 
         <!-- Main Content -->
@@ -193,6 +202,7 @@
             <!-- Registered Events -->
             <div class="profile-section">
                 <h2>Registered Events</h2>
+                <div class="scroll-container">
                 <ul>
                     <li>
                         <span>Hackathon 2025 - 25th Jan 2025</span>
@@ -202,7 +212,48 @@
                         <span>Cultural Fest 2024 - 15th Dec 2024</span>
                         <span class="status attended">Attended</span>
                     </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Cultural Fest 2024 - 15th Dec 2024</span>
+                        <span class="status attended">Attended</span>
+                    </li>
+                    <li>
+                        <span>Hackathon 2025 - 25th Jan 2025</span>
+                        <span class="status upcoming">Upcoming</span>
+                    </li>
+                    <li>
+                        <span>Hackathon 2025 - 25th Jan 2025</span>
+                        <span class="status upcoming">Upcoming</span>
+                    </li>
+                    <li>
+                        <span>Hackathon 2025 - 25th Jan 2025</span>
+                        <span class="status upcoming">Upcoming</span>
+                    </li>
+                    <li>
+                        <span>Hackathon 2025 - 25th Jan 2025</span>
+                        <span class="status upcoming">Upcorbebrming</span>
+                    </li>
                 </ul>
+            </div>
             </div>
 
             <!-- Organized Events
@@ -218,7 +269,7 @@
 
             <!-- Actions -->
             <div class="profile-actions">
-                <button>View Upcoming Events</button>
+                <a href="/home/student"><button>View Upcoming Events</button></a>
                 <!-- <button>Create New Event</button> -->
                 <!-- <button>Download Certificate</button> -->
             </div>
