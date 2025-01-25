@@ -68,7 +68,7 @@ router.post('/register-event/:eventId', authenticate, async (req, res) => {
 });
 
 // Route to get upcoming events
-router.get('/upcoming-events', authenticate, async (req, res) => {
+router.get('/upcoming-events', async (req, res) => {
     try {
         const { category } = req.query;
         const today = new Date();
@@ -89,7 +89,7 @@ router.get('/upcoming-events', authenticate, async (req, res) => {
 });
 
 // Route to get ongoing events
-router.get('/ongoing-events', authenticate, async (req, res) => {
+router.get('/ongoing-events',async (req, res) => {
     try {
         const { category } = req.query;
         const today = new Date();
@@ -109,6 +109,27 @@ router.get('/ongoing-events', authenticate, async (req, res) => {
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching ongoing events', error: error.message });
+    }
+});
+
+// Route to get events organized by the logged-in organizer
+router.get('/organized-events', authenticate, async (req, res) => {
+    try {
+        console.log('Request received at /organized-events'); // Log request received
+
+        if (!req.user) {
+            console.log('User not authenticated'); // Log if user is not authenticated
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
+
+        const events = await Event.find({ organizer: req.user._id })
+            .sort({ date: 1 })
+            .populate('organizer', 'name');
+
+        res.status(200).json(events);
+    } catch (error) {
+        console.error('Error fetching organized events:', error); // Log the error
+        res.status(500).json({ message: 'Error fetching organized events', error: error.message });
     }
 });
 
