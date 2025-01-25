@@ -85,11 +85,11 @@
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
                 localStorage.setItem('token', result.token); // Store the token in local storage
-                console.log(result.user.role);
+                // console.log(result.user.role);
                 if (result.user.role === 'student') {
-                    window.location.href = '/home/student'; // Redirect to student.html
+                    window.location.href = `/home/student?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
                 } else if (result.user.role === 'organizer') {
-                    window.location.href = '/home/organizer'; // Redirect to organizer.html
+                    window.location.href = `/home/organizer?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
                 }
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
@@ -101,6 +101,8 @@
             alert('An error occurred during login');
         }
     });
+
+ 
 </script>
 
 <script>

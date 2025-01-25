@@ -7,11 +7,11 @@ const authorize = (roles) => {
         try {
             const userRole = await Role.findById(req.user.role);
             if (!userRole || !roles.includes(userRole.name)) {
-                return res.status(403).json({ message: 'Access denied' });
+                return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('You do not have the required role to access this page')}`);
             }
             next();
         } catch (error) {
-            res.status(500).json({ message: 'Authorization error', error: error.message });
+            return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Authorization error')}`);
         }
     };
 };

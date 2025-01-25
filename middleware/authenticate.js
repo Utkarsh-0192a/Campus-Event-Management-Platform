@@ -4,25 +4,28 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const authenticate = async (req, res, next) => {
+    let token = '';
     const authHeader = req.header('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Access denied, no token provided' });
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.replace('Bearer ', '');
+    } else if (req.query.token) {
+        token = req.query.token;
+    } else {
+        return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Access denied, no token provided')}`);
     }
-
-    const token = authHeader.replace('Bearer ', '');
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId);
         if (!user) {
-            return res.status(401).json({ message: 'User not found or no longer exists' });
+            return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('User not found or no longer exists')}`);
         }
 
         req.user = user; // Attach user to request object
         next();
     } catch (error) {
         console.error('Authentication error:', error.message);
-        res.status(403).json({ message: 'Invalid or expired token' });
+        return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Invalid or expired token')}`);
     }
 };
 
