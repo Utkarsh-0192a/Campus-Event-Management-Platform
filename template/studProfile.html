@@ -230,18 +230,27 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found for user details');
-                return;
-            }
             try {
+                console.log('Checking token...');
+                const tokenResponse = await fetch('/api/auth/check-token', {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies in the request
+                });
+
+                if (!tokenResponse.ok) {
+                    console.error('Token is invalid. Please log in.');
+                    return;
+                }
+
+                console.log('Fetching user info...');
                 const response = await fetch('/api/auth/me', {
                     method: 'GET',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    credentials: 'include' // Include cookies in the request
                 });
+
                 if (response.ok) {
                     const userData = await response.json();
+                    console.log('User data:', userData);
                     document.querySelector('.profile-sidebar h1').textContent = userData.name || 'Unnamed';
                     document.querySelector('.profile-sidebar p').textContent = userData.email || 'No Email Provided';
                 } else {
@@ -254,7 +263,7 @@
             // Fetch registered events
             try {
                 const response = await fetch('/api/events/my-events', {
-                    headers: { 'Authorization': `Bearer ${token}` },
+                    credentials: 'include' // Include cookies in the request
                 });
 
                 const events = await response.json();
@@ -269,14 +278,7 @@
                         const timestamp1 = edate.getTime();
                         const cdate = new Date();
                         const timestamp2 = cdate.getTime();
-                        // console.log(timestamp1);
-                        // console.log(timestamp2);
-                        if (timestamp1 > timestamp2){
-                            status = 'upcoming';
-                        }
-                        else{
-                            status = 'attended';
-                        }
+                        let status = timestamp1 > timestamp2 ? 'upcoming' : 'attended';
                         const eventItem = document.createElement('li');
                         eventItem.innerHTML = `
                             <span>${event.name} - ${new Date(event.date).toLocaleDateString()}</span>

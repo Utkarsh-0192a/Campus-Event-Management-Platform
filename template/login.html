@@ -69,7 +69,6 @@
 
         const username = document.getElementById('unames').value;
         const password = document.getElementById('passwds').value;
-        // const role = document.getElementById('roleds').value;
 
         try {
             const response = await fetch('/api/auth/login', {
@@ -84,12 +83,11 @@
             const messageDiv = document.getElementById('message');
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
-                localStorage.setItem('token', result.token); // Store the token in local storage
-                // console.log(result.user.role);
+                // Redirect based on user role
                 if (result.user.role === 'student') {
-                    window.location.href = `/home/student?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
+                    window.location.href = `/home/student`;
                 } else if (result.user.role === 'organizer') {
-                    window.location.href = `/home/organizer?token=${encodeURIComponent(result.token)}&id=${encodeURIComponent(result.user._id)}`;
+                    window.location.href = `/home/organizer`;
                 }
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
@@ -100,11 +98,8 @@
             document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
             alert('An error occurred during login');
         }
-    });
-
- 
+});
 </script>
-
 <script>
     document.getElementById('signup').addEventListener('submit', async (e) => {
         e.preventDefault();

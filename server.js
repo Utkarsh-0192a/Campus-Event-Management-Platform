@@ -14,7 +14,7 @@ require('dotenv').config();
 const authorize  = require('./middleware/authorize');
 const authenticate = require('./middleware/authenticate');
 const Queue = require('bull');
-
+const cookieParser = require('cookie-parser');
 // Initialize dotenv for environment variables
 // dotenv.config();
 
@@ -23,6 +23,7 @@ const app = express();
 
 // Enable CORS
 app.use(cors());
+app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,9 +45,17 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.log(err));
 
 // Routes
+console.log('Registering auth routes...');
 app.use('/api/auth', authRoutes);
+console.log('Auth routes registered.');
+
+console.log('Registering event routes...');
 app.use('/api/events', eventRoutes);
+console.log('Event routes registered.');
+
+console.log('Registering role routes...');
 app.use('/api/roles', roleRoutes);
+console.log('Role routes registered.');
 
 const emailQueue = new Queue('emailQueue', {
   redis: {
@@ -82,8 +91,19 @@ app.get('/login', (req, res) => {
 
 // Logout route
 app.get('/logout', (req, res) => {
+  res.clearCookie('token');
   res.sendFile(path.join(__dirname, 'template', 'logout.html'));
 });
+
+app.get('/protected-endpoint', (req, res) => {
+  const token = req.cookies.token; // Retrieve the token
+  console.log('Token:', token);
+  res.send('Token received');
+});
+// app.get('/protected-endpoint', (req, res) => {
+//   console.log('Request received');
+//   res.send('OK');
+// });
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
