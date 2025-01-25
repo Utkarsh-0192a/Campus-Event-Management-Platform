@@ -17,7 +17,7 @@
                 <span class="navbar-text"><h1>NITC Event Manager</h1></span>
             </div>
             <ul class="navbar-links">
-                <li><a href="/profile/organizer/addevent" class="navbutton">Add Event</a></li>
+                <li><a href="/home/organizer/addevent" class="navbutton">Add Event</a></li>
                 <!-- <li><a href="/profile/organizer" class="navbutton">Profile</a></li> -->
     
                 <div class="dropdown">
@@ -138,6 +138,7 @@
                                 <p class="date">To: ${event.etime}</p>
                                 <p class="date">At: ${event.venue}</p>
                                 <a href="#" class="button" onclick="showDetails('${event.name}', '${event.description}')" id="${event.id}">More Info</a>
+                                <a href="/participants/:${event.id}" class="button"  id="${event.id}">registrants</a>
                             `;
                             eventsContainer.appendChild(eventCard);
                         }

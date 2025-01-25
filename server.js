@@ -95,15 +95,17 @@ app.get('/logout', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'logout.html'));
 });
 
-app.get('/protected-endpoint', (req, res) => {
-  const token = req.cookies.token; // Retrieve the token
-  console.log('Token:', token);
-  res.send('Token received');
-});
 // app.get('/protected-endpoint', (req, res) => {
-//   console.log('Request received');
-//   res.send('OK');
+//   const token = req.cookies.token; // Retrieve the token
+//   console.log('Token:', token);
+//   res.send('Token received');
 // });
+
+app.get("/participants/:eventId", (req, res) => {
+  const eventId = req.params.eventId;
+
+  res.sendFile(path.join(__dirname, 'template', 'participants.html'))
+});
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
