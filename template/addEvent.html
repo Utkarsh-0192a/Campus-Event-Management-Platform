@@ -72,7 +72,7 @@
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` // Include the token in the request headers
                 },
-                body: JSON.stringify({ name, date, timestart, timeend, venue, category, description }),
+                body: JSON.stringify({ name, date, timestart, timeend, venue, category, description}),
             });
 
             const result = await response.json();

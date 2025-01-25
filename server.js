@@ -47,6 +47,9 @@ app.get('/home/student', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'student.html'));
 });
 
+app.get('/home/organizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'organizer.html'));
+});
 app.get('/home/organizer/addevent', (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'addEvent.html'));
 });

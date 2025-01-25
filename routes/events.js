@@ -24,15 +24,20 @@ const populateUserRole = async (req, res, next) => {
 // Only Admin and Organizer can create events
 router.post('/create-event', authenticate, populateUserRole, authorize(['admin', 'organizer']), async (req, res) => {
     try {
-        // Create a new event
+        const { name, date, timestart, timeend, venue, category, description } = req.body;
+
+        if (!name || !date || !timestart || !timeend || !venue || !category || !description) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
         const event = new Event({
-            name: req.body.name,
-            date: req.body.date,
-            stime: req.body.timestart || req.body.stime,
-            etime: req.body.timeend || req.body.etime,
-            venue: req.body.venue,
-            category: req.body.category,
-            description: req.body.description,
+            name,
+            date,
+            stime: timestart,
+            etime: timeend,
+            venue,
+            category,
+            description,
             organizer: req.user._id, // Link the event to the logged-in organizer
         });
 
@@ -45,8 +50,7 @@ router.post('/create-event', authenticate, populateUserRole, authorize(['admin',
 
 // Any authenticated user can register for an event
 router.post('/register-event/:eventId', authenticate, async (req, res) => {
-    const eventId = req.params.eventId;
-
+    const { eventId } = req.params;
 
     try {
         const event = await Event.findById(eventId);
@@ -54,12 +58,57 @@ router.post('/register-event/:eventId', authenticate, async (req, res) => {
             return res.status(404).json({ message: 'Event not found' });
         }
 
-        // Logic to register the user (e.g., add user to event's participants list)
-        // For simplicity, assuming a basic registration without a "participants" array
+        // Add logic to register the user (if required)
+        // Example: Adding user to a participants list in the Event model
 
         res.status(200).json({ message: 'Successfully registered for the event' });
     } catch (error) {
         res.status(500).json({ message: 'Error registering for event', error: error.message });
+    }
+});
+
+// Route to get upcoming events
+router.get('/upcoming-events', authenticate, async (req, res) => {
+    try {
+        const { category } = req.query;
+        const today = new Date();
+        const query = { date: { $gt: today } };
+        
+        if (category) {
+            query.category = category;
+        }
+        
+        const events = await Event.find(query)
+            .sort({ date: 1 })
+            .populate('organizer', 'name');
+        
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching upcoming events', error: error.message });
+    }
+});
+
+// Route to get ongoing events
+router.get('/ongoing-events', authenticate, async (req, res) => {
+    try {
+        const { category } = req.query;
+        const today = new Date();
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+        
+        const query = { date: { $gte: startOfDay, $lte: endOfDay } };
+        
+        if (category) {
+            query.category = category;
+        }
+        
+        const events = await Event.find(query)
+            .sort({ date: 1 })
+            .populate('organizer', 'name');
+        
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching ongoing events', error: error.message });
     }
 });
 
