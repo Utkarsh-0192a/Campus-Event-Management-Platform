@@ -84,12 +84,15 @@
             const messageDiv = document.getElementById('message');
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+                alert('Login successful');
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                alert(`Login failed: ${result.message}`);
             }
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+            alert('An error occurred during login');
         }
     });
 </script>
@@ -117,12 +120,15 @@
             const messageDiv = document.getElementById('message');
             if (response.ok) {
                 messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+                alert('Registration successful');
             } else {
                 messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                alert(`Registration failed: ${result.message}`);
             }
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
+            alert('An error occurred during registration');
         }
     });
 </script>
