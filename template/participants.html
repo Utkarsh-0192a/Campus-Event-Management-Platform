@@ -210,12 +210,43 @@
 
             <!-- Actions -->
             <div class="profile-actions">
-                <button>Send Notification</button>
+                <button id="notify" onclick="sendNotification()" >Send Notification</button>
             </div>
         </div>
     </div>
     
     <script>
+        let participantEmails = []; // Store participant emails globally
+
+        // Add sendNotification function
+        async function sendNotification() {
+            try {
+                const emailData = {
+                    to: participantEmails,
+                    subject: 'Event Notification',
+                    message: 'This is a notification regarding the event you registered for.'
+                };
+
+                const notifyResponse = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData),
+                    credentials: 'include'
+                });
+
+                if (notifyResponse.ok) {
+                    alert('Notification sent successfully to all participants!');
+                } else {
+                    throw new Error('Failed to send notification');
+                }
+            } catch (error) {
+                console.error('Error sending notification:', error);
+                alert('Failed to send notification');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch('/api/auth/check-token', {
                 method: 'GET',
@@ -245,6 +276,7 @@
                     }
 
                     const participants = await response.json();
+                    participantEmails = participants.map(p => p.email); // Store emails
                     document.getElementById('count').textContent = participants.length;
                     const container = document.querySelector('.profile-section ul');
                     container.innerHTML = '';

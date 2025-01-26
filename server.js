@@ -132,16 +132,27 @@ createRoles().then(() => console.log('Roles created/checked')).catch(err => cons
 
 // API endpoint to enqueue email
 app.post("/send-email", async (req, res) => {
-  const { to, subject, message, attachment } = req.body;
+    const { to, subject, message, attachment } = req.body;
 
-  try {
-      // Add email to the queue
-      await emailQueue.add({ to, subject, message, attachment });
-      res.status(200).json({ message: "Email queued successfully!" });
-  } catch (error) {
-      console.error("Error queuing email:", error);
-      res.status(500).json({ message: "Failed to queue email." });
-  }
+    try {
+        // Handle array of recipients
+        const recipients = Array.isArray(to) ? to : [to];
+        
+        // Add email to the queue for each recipient
+        for (const recipient of recipients) {
+            await emailQueue.add({
+                to: recipient,
+                subject,
+                message,
+                attachment
+            });
+        }
+        
+        res.status(200).json({ message: "Emails queued successfully!" });
+    } catch (error) {
+        console.error("Error queuing emails:", error);
+        res.status(500).json({ message: "Failed to queue emails." });
+    }
 });
 
 // Start the server
