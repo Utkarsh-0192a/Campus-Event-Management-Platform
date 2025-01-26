@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Forum</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#forum-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+#posts-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+}
+
+.post {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.post:last-child {
+    border-bottom: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input, form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+form button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Event Forum</h1>
+
+    <!-- Forum Section -->
+    <div id="forum-container">
+        <h2>Discussion Forum</h2>
+        <div id="posts-container">
+            <!-- Posts will be dynamically loaded here -->
+        </div>
+
+        <form id="new-post-form">
+            <input type="text" id="username" placeholder="Your Name" required>
+            <textarea id="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Post</button>
+        </form>
+    </div>
+
+    <script>
+        const eventId = '123'; // Replace with dynamic event ID
+
+// Fetch and display posts
+async function loadPosts() {
+    const response = await fetch(`/api/forums/${eventId}`);
+    const posts = await response.json();
+
+    const postsContainer = document.getElementById('posts-container');
+    postsContainer.innerHTML = '';
+
+    posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+            <strong>${post.username}</strong> <em>${new Date(post.timestamp).toLocaleString()}</em>
+            <p>${post.message}</p>
+        `;
+        postsContainer.appendChild(postElement);
+    });
+}
+
+// Handle new post submission
+document.getElementById('new-post-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const message = document.getElementById('message').value;
+
+    const response = await fetch(`/api/forums/${eventId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, message }),
+    });
+
+    if (response.ok) {
+        document.getElementById('new-post-form').reset();
+        loadPosts(); // Refresh posts
+    } else {
+        alert('Failed to post message');
+    }
+});
+
+// Initial load
+loadPosts();
+
+    </script>
+</body>
+</html>

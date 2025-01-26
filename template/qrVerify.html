@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Validation</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    input[type="file"] {
+        display: block;
+        margin: 20px 0;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #fff;
+    }
+
+    input[type="file"]:hover {
+        border-color: #4CAF50;
+    }
+
+    #status {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #666;
+    }
+
+    #result {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        word-wrap: break-word;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+    <h1>QR Code Validation</h1>
+    <p>Upload an image containing the QR code:</p>
+    <input type="file" id="qr-file" accept="image/*">
+    <p id="status">Waiting for QR code upload...</p>
+    <p id="result">No QR code detected yet.</p>
+    <button onclick="window.location.href='/home/organizer'">Back to Dashboard</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+    <script>
+        const fileInput = document.getElementById('qr-file');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+
+        fileInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) {
+                status.textContent = "No file selected.";
+                return;
+            }
+
+            status.textContent = "Processing file...";
+            const image = new Image();
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                image.src = reader.result;
+            };
+
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+
+                if (code) {
+                    result.textContent = `QR Code detected: ${code.data}`;
+                    status.textContent = "Validating QR code...";
+                    validateQRCode(code.data);
+                } else {
+                    result.textContent = "No QR code detected in the image.";
+                    status.textContent = "Please upload a valid QR code image.";
+                }
+            };
+
+            reader.readAsDataURL(file);
+            });
+
+        async function validateQRCode(data) {
+            const status = document.getElementById('status');
+            const result = document.getElementById('result');
+            
+            try {
+                // Parse QR data
+                let qrData;
+                try {
+                    qrData = JSON.parse(data);
+                } catch (e) {
+                    throw new Error('Invalid QR code format');
+                }
+
+                // Get event ID from URL
+                const eventId = new URLSearchParams(window.location.search).get('id');
+                if (!eventId) {
+                    throw new Error('Event ID not found in URL');
+                }
+
+                // Send verification request
+                const response = await fetch(`/api/events/verify-qr/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ qrData })
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(responseData.message || 'Verification failed');
+                }
+
+                // Update UI
+                status.textContent = '✅ ' + responseData.message;
+                result.innerHTML = `
+                    <strong>Event:</strong> ${responseData.eventName}<br>
+                    <strong>Date:</strong> ${new Date(responseData.date).toLocaleDateString()}<br>
+                    <strong>Status:</strong> Verified
+                `;
+            } catch (error) {
+                console.error('Verification error:', error);
+                status.textContent = '❌ ' + error.message;
+                result.textContent = 'Please try again with a valid QR code';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // const response = await fetch('/api/auth/check-token', {
+            //     method: 'GET',
+            //     credentials: 'include'
+            // });
+
+            // if (!response.ok) {
+            //     window.location.href = "/login";
+            // }
+
+            try {
+                // get event id from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+                console.log('Event ID:', eventId); // Debug log
+            }
+            catch (error) {
+                console.error('Error fetching event ID:', error);
+            }
+        });
+    </script>
+</body>
+</html>

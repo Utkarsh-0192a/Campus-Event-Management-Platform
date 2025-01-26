@@ -105,6 +105,10 @@ app.get("/participants", authenticate, authorize('organizer'), (req, res) => {
   res.sendFile(path.join(__dirname, 'template', 'participants.html'));
 });
 
+app.get("/qrverify", authenticate, authorize('organizer'), (req, res) => {
+  res.sendFile(path.join(__dirname, 'template', 'qrVerify.html'));
+});
+
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).sendFile(path.join(__dirname, 'template', 'unauthorized.html'));

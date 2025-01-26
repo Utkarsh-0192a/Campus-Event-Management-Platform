@@ -21,7 +21,7 @@
                 <!-- <li><a href="/profile/organizer" class="navbutton">Profile</a></li> -->
     
                 <div class="dropdown">
-                    <li><a href="#" class="navbutton" class="dropdown-link">Profile</a></li>
+                    <li><a href="#" class="navbutton" class="dropdown-link">Details</a></li>
                     <!-- <a href="#" class="">Open Dropdown</a> -->
                     <div class="dropdown-content">
                       <p id="profname">Name</p>
@@ -43,13 +43,13 @@
                 <div style="display: flex; justify-content: space-between;">
                     <h1>Organized Events</h1>
                     <select id="category" name="cat" required>
-                        <option value="all" disabled selected hidden>All</option>
+                        <option value="all" selected>All</option>
                         <option value="workshop">Workshop</option>
                         <option value="hackathon">Hackathon</option>
                         <option value="cultural_event">Cultural Event</option>
                         <option value="contest">Contest</option>
                     </select>
-                    <button class="navbutton" style="padding: 15px; margin: 30px; font-size: small;">Filter</button>
+                    <button class="navbutton" onclick="fetchOrganizedEvents()" style="padding: 15px; margin: 30px; font-size: small;">Filter</button>
                 </div>
 
                 <!-- Card Section -->

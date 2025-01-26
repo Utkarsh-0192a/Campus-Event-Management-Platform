@@ -79,9 +79,7 @@ router.post('/register/:eventId', authenticate, async (req, res) => {
         const qrData = {
             eventId,
             studentId,
-            registrationId: `${eventId}-${studentId}`,
             eventName: event.name,
-            date: event.date
         };
 
         // Save QR code locally
@@ -202,28 +200,43 @@ router.get('/my-events', authenticate, async (req, res) => {
     }
 });
 
-router.post('/verify', async (req, res) => {
+router.post('/verify-qr/:eventId', async (req, res) => {
+    const { qrData } = req.body;
+    const eventId = req.params.eventId;
+
+    if (!qrData || !qrData.eventId || !qrData.studentId) {
+        return res.status(400).json({ message: "Invalid QR data." });
+    }
+
     try {
-        const { qrData } = req.body;
+        if(qrData.eventId !== eventId) {
+            return res.status(400).json({ message: "Invalid QR code for this event." });
+        }
+        // Find the event by eventId
+        const event = await Event.findOne({ eventId: qrData.eventId });
 
-        // Parse the QR code data
-        const { eventId, studentId } = JSON.parse(qrData);
-
-        // Check if the event exists and the student is registered
-        const event = await Event.findById(eventId);
         if (!event) {
-            return res.status(404).json({ message: 'Event not found' });
+            return res.status(404).json({ message: "Event not found." });
         }
 
-        if (!event.registeredStudents.includes(studentId)) {
-            return res.status(400).json({ message: 'Student not registered for this event' });
-        }
+        // Check if studentId is in the registeredStudents array
+        const isRegistered = event.registeredStudents.includes(qrData.studentId);
 
-        res.status(200).json({ message: 'QR Code verified successfully' });
+        if (isRegistered) {
+            return res.status(200).json({
+                message: "Student is registered for this event.",
+                eventName: event.name,
+                date: event.date,
+            });
+        } else {
+            return res.status(403).json({ message: "Student is not registered for this event." });
+        }
     } catch (error) {
-        res.status(500).json({ message: 'Error verifying QR Code', error: error.message });
+        console.error("Error verifying QR code:", error);
+        return res.status(500).json({ message: "Internal server error." });
     }
 });
+
 
 // Route to get participants for a specific event
 router.get('/participants/:eventId', authenticate, async (req, res) => {

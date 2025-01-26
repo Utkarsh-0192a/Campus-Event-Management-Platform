@@ -36,7 +36,7 @@
                         <option value="cultural_event">Cultural Event</option>
                         <option value="contest">Contest</option>
                     </select>
-                    <button class="navbutton" onclick="fetchEvents('upcoming')">Filter</button>
+                    <button class="navbutton" onclick="fetchEvents('upcoming')" style="padding: 15px; margin: 30px;">Filter</button>
                 </div>
                 <section class="cards-section" id="upcoming-events"></section>
             </div>
@@ -52,7 +52,7 @@
                         <option value="cultural_event">Cultural Event</option>
                         <option value="contest">Contest</option>
                     </select>
-                    <button class="navbutton" onclick="fetchEvents('ongoing')">Filter</button>
+                    <button class="navbutton" onclick="fetchEvents('ongoing')" style="padding: 15px; margin: 30px;">Filter</button>
                 </div>
                 <section class="cards-section" id="ongoing-events"></section>
             </div>
@@ -126,17 +126,23 @@ async function fetchEvents(type) {
         eventsContainer.innerHTML = "";
         events.forEach(event => {
             if (category === "all" || event.category === category) {
+                let disc;
+                if (event.description.length > 30) {
+                    disc = event.description.slice(0, 27) + "...";
+                } else {
+                    disc = event.description;
+                }
                 const eventCard = document.createElement("div");
                 eventCard.className = "event-card";
                 eventCard.innerHTML = `
                     <h2>${event.name}</h2>
-                    <p>${event.description.slice(0, 30)}...</p>
+                    <p>${disc}</p>
                     <p>Date: ${new Date(event.date).toLocaleDateString()}</p>
                     <p>From: ${event.stime}</p>
                     <p>To: ${event.etime}</p>
                     <p>Venue: ${event.venue}</p>
-                    <button onclick="registerForEvent('${event._id}')">Register</button>
-                    <button onclick="showDetails('${event.name}', '${event.description}')">More</button>
+                    <button class="button" onclick="registerForEvent('${event._id}')">Register</button>
+                    <button class="button" onclick="showDetails('${event.name}', '${event.description}')">More</button>
                 `;
                 eventsContainer.appendChild(eventCard);
             }
