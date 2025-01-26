@@ -251,7 +251,7 @@
                 if (response.ok) {
                     const userData = await response.json();
                     console.log('User data:', userData);
-                    document.querySelector('.profile-sidebar h1').textContent = userData.email;
+                    document.querySelector('.profile-sidebar h1').textContent = userData.name;
                     document.querySelector('.profile-sidebar p').textContent = userData.email;
                 } else {
                     console.error('Failed to fetch user info');

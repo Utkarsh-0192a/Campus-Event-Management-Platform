@@ -146,8 +146,10 @@
                     throw new Error('Event ID not found in URL');
                 }
 
+                console.log(eventId,qrData.eventId);
+                if( eventId == qrData.eventId){
                 // Send verification request
-                const response = await fetch(`/api/events/verify-qr/${eventId}`, {
+                const response = await fetch(`/api/events/verifyqr`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,6 +172,10 @@
                     <strong>Date:</strong> ${new Date(responseData.date).toLocaleDateString()}<br>
                     <strong>Status:</strong> Verified
                 `;
+            } else {
+                status.textContent = '❌ ' + 'QR code does not match event ID';
+                result.textContent = 'Please try again with a valid QR code';
+            }
             } catch (error) {
                 console.error('Verification error:', error);
                 status.textContent = '❌ ' + error.message;

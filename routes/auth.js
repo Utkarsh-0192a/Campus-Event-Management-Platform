@@ -106,6 +106,7 @@ router.get('/me', authenticate, async (req, res) => {
         }
 
         res.status(200).json({
+            name: user.name,
             id: user._id,
             username: user.username,
             email: user.email,

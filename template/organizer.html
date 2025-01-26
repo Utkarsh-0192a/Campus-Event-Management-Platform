@@ -176,8 +176,9 @@
                 });
                 if (response.ok) {
                     const userData = await response.json();
-                    document.getElementById('profname').textContent = userData.name || 'Unnamed';
-                    document.getElementById('profemail').textContent = userData.email || 'No Email Provided';
+                    console.log(userData.name,userData.email);
+                    document.getElementById('profname').textContent = userData.name;
+                    document.getElementById('profemail').textContent = userData.email;
                 } else {
                     console.error('Failed to fetch user info');
                 }

@@ -192,7 +192,7 @@
             <h1 id="count">0</h1>
             <h2>Participants</h2>
             <!-- <p>Student</p> -->
-            <a href="/qrverify?id=${event._id}"><button>Verification</button></a>
+            <a href="#" onclick="getvar()"><button>Verification</button></a>
             <a href="/home/organizer"><button>Back</button></a>
         </div>
 
@@ -260,7 +260,7 @@
             try {
                 // get event id from URL
                 const urlParams = new URLSearchParams(window.location.search);
-                const eventId = urlParams.get('id');
+                eventId = urlParams.get('id');
                 console.log('Event ID:', eventId); // Debug log
 
                 // Fetch registered users for the event
@@ -299,6 +299,9 @@
                 console.error('Error:', error);
             }
         });
+        function getvar(){
+                window.location.href = `/qrVerify?id=${eventId}`;
+            }
     </script>
 </body>
 </html>

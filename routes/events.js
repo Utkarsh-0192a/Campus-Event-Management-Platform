@@ -200,20 +200,18 @@ router.get('/my-events', authenticate, async (req, res) => {
     }
 });
 
-router.post('/verify-qr/:eventId', async (req, res) => {
+router.post('/verifyqr', async (req, res) => {
     const { qrData } = req.body;
-    const eventId = req.params.eventId;
 
     if (!qrData || !qrData.eventId || !qrData.studentId) {
         return res.status(400).json({ message: "Invalid QR data." });
     }
 
     try {
-        if(qrData.eventId !== eventId) {
-            return res.status(400).json({ message: "Invalid QR code for this event." });
-        }
+        console.log("data cheking");
+        console.log(qrData.eventId);
         // Find the event by eventId
-        const event = await Event.findOne({ eventId: qrData.eventId });
+        const event = await Event.findOne({ _id: qrData.eventId });
 
         if (!event) {
             return res.status(404).json({ message: "Event not found." });

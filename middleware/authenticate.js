@@ -13,23 +13,23 @@ const authenticate = async (req, res, next) => {
     } else if (req.cookies.token) {
         token = req.cookies.token;
     } else {
-        console.log('No token provided');
+        // console.log('No token provided');
         return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Access denied, no token provided')}`);
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Token decoded:', decoded);
+        // console.log('Token decoded:', decoded);
         const user = await User.findById(decoded.userId);
         if (!user) {
-            console.log('User not found');
+            // console.log('User not found');
             return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('User not found or no longer exists')}`);
         }
 
         req.user = user; // Attach user to request object
         next();
     } catch (error) {
-        console.error('Authentication error:', error.message);
+        // console.error('Authentication error:', error.message);
         return res.redirect(`/template/unauthorized.html?reason=${encodeURIComponent('Invalid or expired token')}`);
     }
 };
