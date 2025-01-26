@@ -1,3 +1,5 @@
 sudo systemctl stop redis
+ps aux | grep redis
+sudo kill -9 150102
 redis-server
 node emailWorker.js

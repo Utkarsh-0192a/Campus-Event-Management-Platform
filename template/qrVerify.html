@@ -5,89 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Validation</title>
     <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        color: #333;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-    h1 {
-        color: #4CAF50;
-        margin-bottom: 20px;
-    }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
 
-    p {
-        margin: 10px 0;
-    }
+        p {
+            margin: 10px 0;
+        }
 
-    input[type="file"] {
-        display: block;
-        margin: 20px 0;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #fff;
-    }
+        input[type="file"] {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #fff;
+        }
 
-    input[type="file"]:hover {
-        border-color: #4CAF50;
-    }
+        input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
 
-    #status {
-        margin-top: 20px;
-        font-weight: bold;
-        color: #666;
-    }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #666;
+        }
 
-    #result {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        word-wrap: break-word;
-    }
+        #result {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            word-wrap: break-word;
+        }
 
-    button {
-        padding: 10px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 5px;
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-        margin-top: 20px;
-    }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+        }
 
-    button:hover {
-        background-color: #45a049;
-    }
-</style>
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #camera {
+            display: none;
+            margin-top: 20px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .toggle-container {
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>QR Code Validation</h1>
-    <p>Upload an image containing the QR code:</p>
-    <input type="file" id="qr-file" accept="image/*">
+    <div class="toggle-container">
+        <button id="toggle-button">Switch to Camera Input</button>
+    </div>
+    <div id="file-input-container">
+        <p>Upload an image containing the QR code:</p>
+        <input type="file" id="qr-file" accept="image/*">
+    </div>
+    <div id="camera">
+        <video id="video" autoplay></video>
+    </div>
     <p id="status">Waiting for QR code upload...</p>
     <p id="result">No QR code detected yet.</p>
     <button onclick="window.location.href='/home/organizer'">Back to Dashboard</button>
+    <button onclick="startagn()">Start Scan</button>
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
+        const toggleButton = document.getElementById('toggle-button');
+        const fileInputContainer = document.getElementById('file-input-container');
+        const cameraContainer = document.getElementById('camera');
+        const video = document.getElementById('video');
         const fileInput = document.getElementById('qr-file');
         const status = document.getElementById('status');
         const result = document.getElementById('result');
+
+        let usingCamera = false;
+
+        toggleButton.addEventListener('click', () => {
+            usingCamera = !usingCamera;
+
+            if (usingCamera) {
+                toggleButton.textContent = 'Switch to File Upload';
+                fileInputContainer.style.display = 'none';
+                cameraContainer.style.display = 'block';
+                startCamera();
+            } else {
+                toggleButton.textContent = 'Switch to Camera Input';
+                fileInputContainer.style.display = 'block';
+                cameraContainer.style.display = 'none';
+                stopCamera();
+            }
+        });
+
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = stream;
+
+                video.addEventListener('play', () => {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+
+                    function scanFrame() {
+                        if (!usingCamera) return;
+
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+
+                        if (code) {
+                            result.textContent = `QR Code detected: ${code.data}`;
+                            status.textContent = "Validating QR code...";
+                            validateQRCode(code.data);
+                        } else {
+                            status.textContent = "Scanning for QR code...";
+                        }
+
+                        requestAnimationFrame(scanFrame);
+                    }
+
+                    scanFrame();
+                });
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                status.textContent = 'Error accessing camera. Please try again.';
+            }
+        }
+
+        function stopCamera() {
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        }
 
         fileInput.addEventListener('change', async (event) => {
             const file = event.target.files[0];
@@ -125,84 +219,61 @@
             };
 
             reader.readAsDataURL(file);
-            });
+        });
+
+        function startagn() {
+            result.textContent = '';
+            status.textContent = 'Scanning for QR code...';
+            startCamera();
+        }
 
         async function validateQRCode(data) {
-            const status = document.getElementById('status');
-            const result = document.getElementById('result');
-            
             try {
-                // Parse QR data
                 let qrData;
                 try {
                     qrData = JSON.parse(data);
                 } catch (e) {
                     throw new Error('Invalid QR code format');
                 }
-
-                // Get event ID from URL
+                stopCamera();
                 const eventId = new URLSearchParams(window.location.search).get('id');
                 if (!eventId) {
                     throw new Error('Event ID not found in URL');
                 }
 
-                console.log(eventId,qrData.eventId);
-                if( eventId == qrData.eventId){
-                // Send verification request
-                const response = await fetch(`/api/events/verifyqr`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ qrData })
-                });
+                if (eventId === qrData.eventId) {
+                    const response = await fetch(`/api/events/verifyqr`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({ qrData })
+                    });
 
-                const responseData = await response.json();
+                    const responseData = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(responseData.message || 'Verification failed');
+                    if (!response.ok) {
+                        throw new Error(responseData.message || 'Verification failed');
+                    }
+                    
+                    status.textContent = '✅ ' + responseData.message;
+                    result.innerHTML = `
+                        <strong>Event:</strong> ${responseData.eventName}<br>
+                        <strong>Date:</strong> ${new Date(responseData.date).toLocaleDateString()}<br>
+                        <strong>Status:</strong> Verified
+                    `;
+                } else {
+                    status.textContent = '❌ QR code does not match event ID';
+                    result.textContent = 'Please try again with a valid QR code';
                 }
-
-                // Update UI
-                status.textContent = '✅ ' + responseData.message;
-                result.innerHTML = `
-                    <strong>Event:</strong> ${responseData.eventName}<br>
-                    <strong>Date:</strong> ${new Date(responseData.date).toLocaleDateString()}<br>
-                    <strong>Status:</strong> Verified
-                `;
-            } else {
-                status.textContent = '❌ ' + 'QR code does not match event ID';
-                result.textContent = 'Please try again with a valid QR code';
-            }
             } catch (error) {
                 console.error('Verification error:', error);
                 status.textContent = '❌ ' + error.message;
                 result.textContent = 'Please try again with a valid QR code';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // const response = await fetch('/api/auth/check-token', {
-            //     method: 'GET',
-            //     credentials: 'include'
-            // });
-
-            // if (!response.ok) {
-            //     window.location.href = "/login";
-            // }
-
-            try {
-                // get event id from URL
-                const urlParams = new URLSearchParams(window.location.search);
-                const eventId = urlParams.get('id');
-                console.log('Event ID:', eventId); // Debug log
-            }
-            catch (error) {
-                console.error('Error fetching event ID:', error);
-            }
-        });
     </script>
 </body>
 </html>

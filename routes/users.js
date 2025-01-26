@@ -50,4 +50,14 @@ router.get('/getuser', authenticate, async (req, res) => {
     }
 });
 
+router.get('/getuser/:id', authenticate, async (req, res) => {
+    try {
+        console.log('Fetching user...'); // Debug log
+        const user = await User.findById(req.params.id).populate('role');
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

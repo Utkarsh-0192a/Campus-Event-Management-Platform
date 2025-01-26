@@ -163,6 +163,10 @@ app.post("/send-email", async (req, res) => {
     }
 });
 
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'template', '404.html'));
+});
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
