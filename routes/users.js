@@ -39,4 +39,15 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Get all users endpoint
+router.get('/getuser', authenticate, async (req, res) => {
+    try {
+        console.log('Fetching users...'); // Debug log
+        const users = await User.find().populate('role');
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

@@ -57,6 +57,10 @@ console.log('Registering role routes...');
 app.use('/api/roles', roleRoutes);
 console.log('Role routes registered.');
 
+console.log('Registering user routes...');
+app.use('/api/users', userRoutes);
+console.log('User routes registered.');
+
 const emailQueue = new Queue('emailQueue', {
   redis: {
     host: '127.0.0.1',
@@ -66,7 +70,7 @@ const emailQueue = new Queue('emailQueue', {
 
 // Serve HTML pages
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'template', 'index.html'));
+  res.sendFile(path.join(__dirname, 'template', 'login.html'));
 });
 
 app.get('/home/student', authenticate, authorize('student'), (req, res) => {

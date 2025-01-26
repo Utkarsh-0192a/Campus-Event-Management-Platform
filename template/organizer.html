@@ -138,7 +138,7 @@
                                 <p class="date">To: ${event.etime}</p>
                                 <p class="date">At: ${event.venue}</p>
                                 <a href="#" class="button" onclick="showDetails('${event.name}', '${event.description}')" id="${event._id}">More Info</a>
-                                <a href="/participants?id=${event._id}" class="button" id="${event._id}">Registrants</a>
+                                <a href="/participants?id=${event._id}" class="button" id="${event._id}">Participants</a>
                             `;
                             eventsContainer.appendChild(eventCard);
                         }

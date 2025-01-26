@@ -80,16 +80,94 @@
 
                 const result = await response.json();
                 const messageDiv = document.getElementById('message');
-                if (response.ok) {
-                    messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
-                } else {
-                    messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
-                }
+                // if (response.ok) {
+                //     // messageDiv.innerHTML = `<p style="color: green;">${result.message}</p>`;
+                    
+                // } else {
+                //     messageDiv.innerHTML = `<p style="color: red;">${result.message}</p>`;
+                // }
+                alert(result.message);
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('message').innerHTML = `<p style="color: red;">An error occurred</p>`;
             }
+            sendNotification();
         });
     </script>
+    <script>
+        let participantEmails = []; // Store participant emails globally
+
+        // Add sendNotification function
+        async function sendNotification() {
+            alert('Sending notification to all users...' + participantEmails.length);
+            const name = document.getElementById('evename').value;
+            const date = document.getElementById('evedate').value;
+            const timestart = document.getElementById('evetimestart').value;
+            const timeend = document.getElementById('evetimeend').value;
+            const venue = document.getElementById('evevenue').value;
+            const category = document.getElementById('evecategory').value;
+            const description = document.getElementById('evedis').value;
+            try {
+                const emailData = {
+                    to: participantEmails,
+                    subject: `${name} - New Event Notification`,
+                    message: `This is a notification regarding the new event.\n${description}\nDate: ${date}\nTime: ${timestart} - ${timeend}\nVenue: ${venue}\nCategory: ${category}`
+                };
+
+                const notifyResponse = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData),
+                    credentials: 'include'
+                });
+
+                if (notifyResponse.ok) {
+                    alert('Notification sent successfully to all users!');
+                } else {
+                    throw new Error('Failed to send notification');
+                }
+            } catch (error) {
+                console.error('Error sending notification:', error);
+                alert('Failed to send notification');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/api/auth/check-token', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                window.location.href = "/login";
+            }
+
+            try {
+                // Fetch registered users for the event
+                try {
+                    const response = await fetch(`/api/users/getuser`, {
+                        method: 'GET', // Use GET method
+                        credentials: 'include'
+                    });
+
+                    if (!response.ok) {
+                        console.error('Failed to fetch registered users');
+                        return;
+                    }
+
+                    const participants = await response.json();
+                    participantEmails = participants.map(p => p.email); // Store emails
+                    console.log('Participants:', participantEmails);
+                } catch (error) {
+                    console.error('Error fetching registered users:', error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+
 </body>
 </html>

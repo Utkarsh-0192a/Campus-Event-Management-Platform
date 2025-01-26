@@ -8,6 +8,9 @@
 </head>
 <body>
 
+    <div id="shutter-window" class="shutter-window">
+    </div>
+
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
 		<form id="signup" action="/api/auth/register" method="POST">
@@ -149,7 +152,16 @@
         container.classList.remove("right-panel-active");
     });
     </script>
+<script>
+    // Get elements
+    const shutterWindow = document.getElementById('shutter-window');
 
+    // Open the shutter window
+    shutterWindow.addEventListener('click', () => {
+        shutterWindow.classList.add('open');
+    });
+
+</script>
 </body>
 </html>
 
